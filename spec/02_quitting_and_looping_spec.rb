@@ -9,7 +9,7 @@ describe TodoApp do
   let(:output) { io_output.string }
 
   describe "quitting and looping" do
-    xit "the program exits when the user types 'quit'" do
+    it "the program exits when the user types 'quit'" do
       expect_user_input('quit')
       app.run
 

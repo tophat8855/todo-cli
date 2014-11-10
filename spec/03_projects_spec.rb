@@ -28,20 +28,30 @@ describe TodoApp do
       end
     end
 
-    describe 'editing projects' do
-      it "existing projects can be renamed" do
-        simulate_user_input("create", "Chores", "edit", "Chores", "Groceries", "list", "quit")
+    describe 'renaming projects' do
+      xit "existing projects can be renamed" do
+        simulate_user_input(
+          "create", "Chores",
+          "rename", "Chores", "Groceries",
+          "list",
+          "quit"
+        )
         app.run
 
-        expect(output).to include("Please enter the project name to edit:\n")
+        expect(output).to include("Please enter the project name to rename:\n")
         expect(output).to include("Please enter the new project name:\n")
         expect(output).to include("Projects:\n  Groceries")
       end
     end
 
     describe 'deleting projects' do
-      it "existing projects can be removed" do
-        simulate_user_input("create", "Chores", "delete", "Chores", "list", "quit")
+      xit "existing projects can be removed" do
+        simulate_user_input(
+          "create", "Chores",
+          "delete", "Chores",
+          "list",
+          "quit"
+        )
         app.run
 
         expect(output).to include("Please enter the project name to delete:\n")

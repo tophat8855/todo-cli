@@ -38,6 +38,7 @@ class TodoApp < CommandLineApp
   end
 
   def create(new_project)
+    @projects << new_project
     puts "Projects:\n  #{new_project}"
   end
 

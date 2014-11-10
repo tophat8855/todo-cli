@@ -17,9 +17,7 @@ describe TodoApp do
       # you can press ctrl+c to get out of it
     end
 
-
-
-    xit "the program keeps going until the user types 'quit'" do
+    it "the program keeps going until the user types 'quit'" do
       expect_user_input('gerbil', 'fish', 'quit')
       app.run
 

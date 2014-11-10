@@ -1,3 +1,3 @@
-require_relative "./lib/todos"
+require_relative "./lib/todo_app"
 
-Todos.new($stdout).run
+TodoApp.new($stdin, $stdout).run

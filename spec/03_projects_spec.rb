@@ -29,7 +29,7 @@ describe TodoApp do
     end
 
     describe 'editing projects' do
-      xit "existing projects can be renamed" do
+      it "existing projects can be renamed" do
         simulate_user_input("create", "Chores", "edit", "Chores", "Groceries", "list", "quit")
         app.run
 
@@ -40,7 +40,7 @@ describe TodoApp do
     end
 
     describe 'deleting projects' do
-      xit "existing projects can be removed" do
+      it "existing projects can be removed" do
         simulate_user_input("create", "Chores", "delete", "Chores", "list", "quit")
         app.run
 

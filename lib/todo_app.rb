@@ -11,13 +11,8 @@ class TodoApp < CommandLineApp
 
   def run
     puts "Welcome to the TodoApp"
-    puts "Type 'list' to list projects"
-    puts "Type 'create' to create a new project"
-    puts "Type 'edit' to edit a project"
-    puts "Type 'delete' to delete a project"
-    puts "Type 'rename' to rename a project"
-    puts "Type 'quit' to exit programme"
     running = true
+    project_menu
 
     while running
       user_input = gets.chomp
@@ -35,15 +30,14 @@ class TodoApp < CommandLineApp
         editing = true
         puts "Please enter the project name to edit:\n"
         project_to_edit = gets.chomp
-          puts "Editing Project: #{project_to_edit}"
-          puts "Type 'list' to list tasks"
-          puts "Type 'create' to create a new task"
-          puts "Type 'edit' to edit a task"
-          puts "Type 'complete' to complete a task and remove it from the list"
+        puts "Editing Project: #{project_to_edit}"
+        puts "Type 'list' to list tasks"
+        puts "Type 'create' to create a new task"
+        puts "Type 'edit' to edit a task"
+        puts "Type 'complete' to complete a task and remove it from the list"
 
         while editing
           user_input = gets.chomp
-
           case user_input
           when 'list'
             list_tasks(project_to_edit)
@@ -57,24 +51,27 @@ class TodoApp < CommandLineApp
             complete(project_to_edit)
           when 'back'
             editing = false
-            puts "Type 'list' to list projects"
-            puts "Type 'create' to create a new project"
-            puts "Type 'edit' to edit a project"
-            puts "Type 'delete' to delete a project"
-            puts "Type 'rename' to rename a project"
-            puts "Type 'quit' to exit programme"
+            project_menu
           when 'quit'
             editing = false
             running = false
           end
         end
-
       when 'quit'
         running = false
       end
 
     end
 
+  end
+
+  def project_menu
+    puts "Type 'list' to list projects"
+    puts "Type 'create' to create a new project"
+    puts "Type 'edit' to edit a project"
+    puts "Type 'rename' to rename a project"
+    puts "Type 'delete' to delete a project"
+    puts "Type 'quit' to exit programme"
   end
 
   def list
@@ -109,7 +106,6 @@ class TodoApp < CommandLineApp
   def delete ## want to check for valid project name?
     puts "Please enter the project name to delete:\n"
     project_to_delete = gets.chomp
-
     @projects.each do |project|
       if project.name == project_to_delete
         @projects.delete(project)
@@ -149,7 +145,6 @@ class TodoApp < CommandLineApp
     @projects.each do |project|
       if project.name == project_name
         is_it_a_legit_task = []
-
         project.tasks.each do |task|
           if task_to_edit == task.name
             is_it_a_legit_task << true
@@ -160,7 +155,6 @@ class TodoApp < CommandLineApp
           else
             is_it_a_legit_task << false
           end
-
         end
         unless is_it_a_legit_task.include?(true)
           puts "task not found: '#{task_to_edit}'"
@@ -186,11 +180,8 @@ class TodoApp < CommandLineApp
           unless is_it_a_legit_task.include?(true)
             puts "task not found: '#{completed_task}'"
           end
-
         end
       end
     end
-
   end
-
 end

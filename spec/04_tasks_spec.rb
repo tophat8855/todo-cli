@@ -37,14 +37,14 @@ describe TodoApp do
       end
     end
 
-    # describe 'going back' do
-    #   it "reprints the projects instructions" do
-    #     simulate_user_input(project_setup_commands, 'back', 'quit')
-    #     app.run
-    #
-    #     expect(output.scan(/'list' to list projects/).count).to be == 2
-    #   end
-    # end
+    describe 'going back' do
+      it "reprints the projects instructions" do
+        simulate_user_input(project_setup_commands, 'back', 'quit')
+        app.run
+
+        expect(output.scan(/'list' to list projects/).count).to be == 2
+      end
+    end
 
     describe 'listing' do
       describe 'when there are no tasks' do
@@ -55,7 +55,7 @@ describe TodoApp do
           expect(output).to_not include("Projects:\n  Chores")
         end
 
-        xit "shows 'none'" do
+        it "shows 'none'" do
           simulate_user_input(project_setup_commands,'list', 'back', 'quit')
           app.run
 
@@ -64,16 +64,16 @@ describe TodoApp do
       end
 
       describe 'when tasks have been created' do
-        before do
-          simulate_user_input(project_setup_commands, task_creation_commands, 'list', 'back', 'quit')
-        end
+         before do
+           simulate_user_input(project_setup_commands, task_creation_commands, 'list', 'back', 'quit')
+         end
 
-        xit "should not show projects" do
+        it "should not show projects" do
           app.run
           expect(output).to_not include("Projects:\n  Chores")
         end
 
-        xit "should show new tasks" do
+        it "should show new tasks" do
           app.run
           expect(output).to include("do the laundry")
           expect(output).to include("iron shirts")
@@ -91,7 +91,7 @@ describe TodoApp do
           )
         end
 
-        xit "should update the task in the list" do
+        it "should update the task in the list" do
           app.run
           expect(output).to include("iron clothes")
           expect(output).not_to include("iron shirts")
@@ -107,7 +107,7 @@ describe TodoApp do
           )
         end
 
-        xit "should report and return to normal menu" do
+        it "should report and return to normal menu" do
           app.run
           expect(output).to include("task not found: 'not here'")
         end
@@ -124,7 +124,7 @@ describe TodoApp do
           )
         end
 
-        xit "should list the task as completed" do
+        it "should list the task as completed" do
           app.run
           expect(output).to include("do the laundry: completed")
         end
@@ -139,13 +139,13 @@ describe TodoApp do
           )
         end
 
-        xit "should still have all its tasks" do
+        it "should still have all its tasks" do
           app.run
           expect(output).to include('do the laundry')
           expect(output).to include('iron shirts')
         end
 
-        xit "should report that it couldn't find the task" do
+        it "should report that it couldn't find the task" do
           app.run
           expect(output).to include("task not found: 'not here'")
         end

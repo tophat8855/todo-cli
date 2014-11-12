@@ -30,14 +30,11 @@ class TodoApp < CommandLineApp
         editing = true
         puts "Please enter the project name to edit:\n"
         project_to_edit = gets.chomp
-        puts "Editing Project: #{project_to_edit}"
-        puts "Type 'list' to list tasks"
-        puts "Type 'create' to create a new task"
-        puts "Type 'edit' to edit a task"
-        puts "Type 'complete' to complete a task and remove it from the list"
+        edit_menu(project_to_edit)
 
         while editing
           user_input = gets.chomp
+
           case user_input
           when 'list'
             list_tasks(project_to_edit)
@@ -57,6 +54,7 @@ class TodoApp < CommandLineApp
             running = false
           end
         end
+
       when 'quit'
         running = false
       end
@@ -72,6 +70,14 @@ class TodoApp < CommandLineApp
     puts "Type 'rename' to rename a project"
     puts "Type 'delete' to delete a project"
     puts "Type 'quit' to exit programme"
+  end
+
+  def edit_menu(edit_this)
+    puts "Editing Project: #{edit_this}"
+    puts "Type 'list' to list tasks"
+    puts "Type 'create' to create a new task"
+    puts "Type 'edit' to edit a task"
+    puts "Type 'complete' to complete a task and remove it from the list"
   end
 
   def list
@@ -96,21 +102,18 @@ class TodoApp < CommandLineApp
     old_name = gets.chomp
     puts "Please enter the new project name:\n"
     new_name = gets.chomp
-    @projects.each do |project|
-      if project.name == old_name
-        project.rename(new_name)
-      end
-    end
+
+    project = @projects.detect {|project| project.name == old_name}
+    project.rename(new_name)
+
   end
 
   def delete ## want to check for valid project name?
     puts "Please enter the project name to delete:\n"
     project_to_delete = gets.chomp
-    @projects.each do |project|
-      if project.name == project_to_delete
-        @projects.delete(project)
-      end
-    end
+    project = @projects.detect{|project| project.name == project_to_delete}
+    @projects.delete(project)
+
   end
 
   def list_tasks(project_title)
@@ -132,11 +135,8 @@ class TodoApp < CommandLineApp
   def create_task(project_name)
     puts "Please enter the new task name:\n"
     new_task_name = gets.chomp
-    @projects.each do |project|
-      if project.name == project_name
-        project.add_task(Task.new(project_name, new_task_name))
-      end
-    end
+    project = @projects.detect {|project| project.name == project_name}
+    project.add_task(Task.new(project_name, new_task_name))
   end
 
   def edit_task(project_name)
@@ -145,6 +145,7 @@ class TodoApp < CommandLineApp
     @projects.each do |project|
       if project.name == project_name
         is_it_a_legit_task = []
+
         project.tasks.each do |task|
           if task_to_edit == task.name
             is_it_a_legit_task << true
@@ -155,6 +156,7 @@ class TodoApp < CommandLineApp
           else
             is_it_a_legit_task << false
           end
+
         end
         unless is_it_a_legit_task.include?(true)
           puts "task not found: '#{task_to_edit}'"
@@ -180,8 +182,11 @@ class TodoApp < CommandLineApp
           unless is_it_a_legit_task.include?(true)
             puts "task not found: '#{completed_task}'"
           end
+
         end
       end
     end
+
   end
+
 end

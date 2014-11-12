@@ -97,7 +97,7 @@ class TodoApp < CommandLineApp
     @projects << Project.new(new_project)
   end
 
-  def rename ## want to come in here and add a check for valid project name ##
+  def rename ## want to come in here and add a check for valid project name?
     puts "Please enter the project name to rename:\n"
     old_name = gets.chomp
     puts "Please enter the new project name:\n"
@@ -111,25 +111,22 @@ class TodoApp < CommandLineApp
   def delete ## want to check for valid project name?
     puts "Please enter the project name to delete:\n"
     project_to_delete = gets.chomp
-    project = @projects.detect{|project| project.name == project_to_delete}
+    project = @projects.detect {|project| project.name == project_to_delete}
     @projects.delete(project)
 
   end
 
   def list_tasks(project_title)
-    @projects.each do |project|
-      if project.name == project_title
-        if project.tasks.empty?
-          puts "Tasks:\n  none"
-        else
-          puts "Tasks:\n"
-          project.tasks.each do |task|
-            puts "  " + task.name.to_s
-          end
-        end
+    project = @projects.detect {|project| project.name == project_title}
+    if project.tasks.empty?
+      puts "Tasks:\n  none"
+    else
+      puts "Tasks:\n"
+      project.tasks.each do |task|
+        puts "  " + task.name.to_s
       end
-
     end
+
   end
 
   def create_task(project_name)
@@ -142,51 +139,31 @@ class TodoApp < CommandLineApp
   def edit_task(project_name)
     puts "Please enter which task to edit:\n"
     task_to_edit = gets.chomp
-    @projects.each do |project|
-      if project.name == project_name
-        is_it_a_legit_task = []
-
-        project.tasks.each do |task|
-          if task_to_edit == task.name
-            is_it_a_legit_task << true
-            puts "Please enter new task name:\n"
-            new_task_name = gets.chomp
-            task.edit_task(new_task_name)
-            puts "Task renamed to #{new_task_name}"
-          else
-            is_it_a_legit_task << false
-          end
-
-        end
-        unless is_it_a_legit_task.include?(true)
-          puts "task not found: '#{task_to_edit}'"
-        end
-      end
+    project = @projects.detect {|project| project.name == project_name}
+    task = project.tasks.detect {|task| task.name == task_to_edit}
+    if task == nil
+      puts "task not found: '#{task_to_edit}'"
+    else
+      puts "Please enter new task name:\n"
+      new_task_name = gets.chomp
+      task.edit_task(new_task_name)
+      puts "Task renamed to #{new_task_name}"
     end
+  end
 
-    def complete(project_name)
-      @projects.each do |project|
-        if project.name == project_name
-          is_it_a_legit_task = []
-          puts "Please enter the task to mark 'complete'"
-          completed_task = gets.chomp
-          project.tasks.each do |task|
-            if completed_task == task.name
-              is_it_a_legit_task << true
-              task.complete
-              puts task.name + ": completed"
-            else
-              is_it_a_legit_task << false
-            end
-          end
-          unless is_it_a_legit_task.include?(true)
-            puts "task not found: '#{completed_task}'"
-          end
+  def complete(project_name)
 
-        end
-      end
+    project = @projects.detect {|project| project.name == project_name}
+    puts "Please enter the task to mark 'complete'"
+    completed_task = gets.chomp
+
+    task = project.tasks.detect {|task| task.name == completed_task}
+    if task == nil
+      puts "task not found: '#{completed_task}'"
+    else
+      task.complete
+      puts task.name + ": completed"
     end
-
   end
 
 end

@@ -1,8 +1,7 @@
 class Task
   attr_reader :name, :completed
 
-  def initialize(project, name)
-    @project = project
+  def initialize(name)
     @name = name
     @completed = false
   end

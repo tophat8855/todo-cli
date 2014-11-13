@@ -1,8 +1,11 @@
 class TodoApp < CommandLineApp
+  attr_reader :output, :input, :model
+
   def initialize(input, output)
     @input = input
     @output = output
     @projects = []
+    @view = View.new(output)
   end
 
   def real_puts message=""
@@ -12,14 +15,14 @@ class TodoApp < CommandLineApp
   def run
     puts "Welcome to the TodoApp"
     running = true
-    project_menu
+    print_project_menu
 
     while running
       user_input = gets.chomp
 
       case user_input
       when 'list'
-        list
+        print_project_list
       when 'create'
         create
       when 'rename'
@@ -30,7 +33,7 @@ class TodoApp < CommandLineApp
         editing = true
         puts "Please enter the project name to edit:\n"
         project_to_edit = gets.chomp
-        edit_menu(project_to_edit)
+        print_edit_menu(project_to_edit)
 
         while editing
           user_input = gets.chomp
@@ -48,7 +51,7 @@ class TodoApp < CommandLineApp
             complete(project_to_edit)
           when 'back'
             editing = false
-            project_menu
+            print_project_menu
           when 'quit'
             editing = false
             running = false
@@ -58,29 +61,18 @@ class TodoApp < CommandLineApp
       when 'quit'
         running = false
       end
-
     end
-
   end
 
-  def project_menu
-    puts "Type 'list' to list projects"
-    puts "Type 'create' to create a new project"
-    puts "Type 'edit' to edit a project"
-    puts "Type 'rename' to rename a project"
-    puts "Type 'delete' to delete a project"
-    puts "Type 'quit' to exit programme"
+  def print_project_menu
+    @view.print_project_menu
   end
 
-  def edit_menu(edit_this)
-    puts "Editing Project: #{edit_this}"
-    puts "Type 'list' to list tasks"
-    puts "Type 'create' to create a new task"
-    puts "Type 'edit' to edit a task"
-    puts "Type 'complete' to complete a task and remove it from the list"
+  def print_edit_menu(edit_this_project)
+    @view.print_edit_menu(edit_this_project)
   end
 
-  def list
+  def print_project_list
     if @projects.empty?
       puts "Projects:\n  none"
     else
@@ -102,7 +94,8 @@ class TodoApp < CommandLineApp
     old_name = gets.chomp
     puts "Please enter the new project name:\n"
     new_name = gets.chomp
-    project = @projects.detect {|project| project.name == old_name}
+    project = find_project(new_name)
+    real_puts(project)
     project.rename(new_name)
   end
 
@@ -157,5 +150,11 @@ class TodoApp < CommandLineApp
       task.complete
       puts task.name + ": completed"
     end
+
+  end
+
+  def find_project(lost_project)
+    @projects.detect {|project| project.name == lost_project}
+
   end
 end
